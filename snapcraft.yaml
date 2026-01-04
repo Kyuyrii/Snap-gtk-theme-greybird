@@ -1,0 +1,56 @@
+name: gtk-theme-greybird
+build-base: core24
+base: bare
+adopt-info: build-day
+platforms:
+  all:
+    build-on: [amd64]
+    build-for: [all]
+summary: Greybird GTK theme
+description: |
+  A Snap that allows you to use Greybird GTK themes in Snap apps
+grade: stable
+confinement: strict
+
+slots:
+  gtk-3-themes:
+    interface: content
+    source:
+      read:
+        - $SNAP/usr/share/themes/Greybird
+        - $SNAP/usr/share/themes/Greybird-dark
+        - $SNAP/usr/share/themes/Greybird-geeko
+        - $SNAP/usr/share/themes/Greybird-geeko-dark
+
+parts:
+  greybird:
+    plugin: meson
+    source: https://github.com/shimmerproject/Greybird.git
+    source-tag: v3.23.4
+    build-packages:
+      - autoconf
+      - libgdk-pixbuf2.0-dev
+      - libglib2.0-bin
+      - librsvg2-dev
+      - meson
+      - ruby-sass
+      - sassc
+    meson-parameters: [--prefix=/usr]
+    prime:
+      - usr/share/themes/*/gtk-3.0
+      - usr/share/themes/*/gtk-4.0
+
+  greybird-geeko:
+    after: [greybird]
+    plugin: meson
+    source: https://github.com/shimmerproject/Greybird-Geeko.git
+    source-tag: 3.23.4
+    meson-parameters: [--prefix=/usr]
+    prime:
+      - usr/share/themes/*/gtk-3.0
+      - usr/share/themes/*/gtk-4.0
+
+  build-day:
+    plugin: nil
+    override-build: |
+      craftctl set version=$(date +%Y-%m-%d)
