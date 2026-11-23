@@ -1,5 +1,5 @@
 name: gtk-theme-greybird
-build-base: core24
+build-base: core26
 base: bare
 adopt-info: build-day
 platforms:
